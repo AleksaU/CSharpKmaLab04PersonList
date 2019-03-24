@@ -33,12 +33,11 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private RelayCommand<object> _saveCommand;
         private RelayCommand<object> _editCommand;
 
-        private bool flag = true;
-
-
         private ObservableCollection<Person> _people;
 
         private ICommand _closeCommand;
+
+        private string myPath = "data.dat";
 
 
 
@@ -194,10 +193,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
                     MessageBox.Show("Happy b-day to you!");
 
                 }
-
-
-            
-
         }
 
 
@@ -207,19 +202,17 @@ namespace CSharpKmaLab04PersonList.ViewModels
             {
  
                 return _deleteCommand ?? (_deleteCommand = new RelayCommand<object>(
-                     DeletePerson, o => flag));
+                     DeletePerson));
             }
         }
 
         public async void DeletePerson(object o)
         {
 
-             flag = false;
+           
             _people.Remove(SelectedItem);
-            await Task.Run(() => Thread.Sleep(100));
-            flag = true;
-
-
+            await Task.Run(() => Thread.Sleep(1000));
+            MessageBox.Show("Deleted!");
 
         }
 
@@ -230,26 +223,23 @@ namespace CSharpKmaLab04PersonList.ViewModels
             get
             {
                 return _saveCommand ?? (_saveCommand = new RelayCommand<object>(
-                     SavePerson, o => flag));
+                     SavePerson));
             }
         }
 
         public async void SavePerson(object o)
         {
-            flag = false;
-
+         
             BinaryFormatter formatter = new BinaryFormatter();
 
-            using (FileStream fs = new FileStream("data.dat", FileMode.OpenOrCreate))
+            using (FileStream fs = new FileStream(myPath, FileMode.OpenOrCreate))
             {
                 // сериализуем весь массив people
                 formatter.Serialize(fs, _people);
 
-
-
             }
-            await Task.Run(() => Thread.Sleep(100));
-            flag = true;
+            await Task.Run(() => Thread.Sleep(1000));
+            MessageBox.Show("Saved!");
 
         }
 
@@ -259,7 +249,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
             get
             {
 
-                return _editCommand ?? (_editCommand = new RelayCommand<object>(o => EditPerson(o), o => flag)
+                return _editCommand ?? (_editCommand = new RelayCommand<object>(o => EditPerson(o))
                    );
             }
         }
@@ -268,12 +258,8 @@ namespace CSharpKmaLab04PersonList.ViewModels
         public async void EditPerson(object o)
         {
 
-            flag = false;
             await Task.Run(() => MessageBox.Show("You can edit user by selecting the field you want to change, type,what you want and then press F2"));
-            await Task.Run(() => Thread.Sleep(100));
-           
-            flag = true;
-
+            await Task.Run(() => Thread.Sleep(1000));
 
         }
 
@@ -282,7 +268,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private bool CanExecuteCommand()
         {
             return !string.IsNullOrWhiteSpace(_name) && !string.IsNullOrWhiteSpace(_surName) && !string.IsNullOrWhiteSpace(_email) && !(_birthDate == new DateTime(0001, 01, 01, 00, 00, 0));
-            ;
+            
 
         }
 

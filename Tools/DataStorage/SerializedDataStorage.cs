@@ -21,15 +21,6 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
             }
         }
 
-   //     public bool UserExists(string login)
-    //    {
-    //        return _users.Exists(u => u.Login == login);
-    //    }
-
-     //   public User GetUserByLogin(string login)
-     //   {
-      //      return _users.FirstOrDefault(u => u.Login == login);
-     //   }
 
         public void AddUser(Person person)
         {
