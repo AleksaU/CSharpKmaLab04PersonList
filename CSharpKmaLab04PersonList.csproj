@@ -55,7 +55,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Tools\DataStorage\IDataStorage.cs" />
+    <Compile Include="Tools\DataStorage\PersonListHelper.cs" />
+    <Compile Include="Tools\DataStorage\SerializedDataStorage.cs" />
+    <Compile Include="Tools\FileFolderHelper.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
+    <Compile Include="Tools\SerializationManager.cs" />
+    <Compile Include="Tools\StationManager.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserPageViewModel.cs" />

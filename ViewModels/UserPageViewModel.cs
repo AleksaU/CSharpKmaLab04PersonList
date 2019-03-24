@@ -1,12 +1,11 @@
 ﻿using CSharpKmaLab04PersonList.Models;
 using CSharpKmaLab04PersonList.Models.Exceptions;
 using CSharpKmaLab04PersonList.Tools;
+using CSharpKmaLab04PersonList.Tools.DataStorage;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -20,13 +19,18 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private string _email;
         private DateTime _birthDate;
 
-        private bool _isAdult;
-        private string _sunSign;
-        private string _chineseSign;
-        private bool _isBirthday;
+        /* private bool _isAdult;
+         private string _sunSign;
+         private string _chineseSign;
+         private bool _isBirthday;
+         */
 
 
         private RelayCommand<object> _proceedCommand;
+
+
+        private ObservableCollection<Person> _people;
+
 
 
         public string Name
@@ -80,6 +84,19 @@ namespace CSharpKmaLab04PersonList.ViewModels
         }
 
 
+        public ObservableCollection<Person> People
+        {
+            get => _people;
+            private set
+            {
+                _people = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
+
         public RelayCommand<Object> ProceedCommand
         {
             get
@@ -95,26 +112,36 @@ namespace CSharpKmaLab04PersonList.ViewModels
             {
                 try
                 {
+                    StationManager.CurrentUser = new Person(_name, _surName, _email, _birthDate);
 
-                    Person person = new Person(_name, _surName, _email, _birthDate);
+
 
                     MessageBox.Show(
 
 
 
-                                                                   $"Your First name is: {person.Name}\n" +
-                                                                   $"Your Surname is: {person.Surname}\n" +
-                                                                   $"Your Email is: {person.Email}\n" +
-                                                                   $"Your Date of birth is: {person.BirthDate}\n" +
-                                                                   $"Are you an Adult: {person.IsAdult}\n" +
-                                                                   $"You are: {person.CalculateAge()} years old\n" +
-                                                                   $"Your SunSign is: {person.SunSign}\n" +
-                                                                   $"Your Chinese Sign is: {person.ChineseSign}\n" +
-                                                                   $"{person}"
-                                                               );
+                                                                                      $"Your First name is: {StationManager.CurrentUser.Name}\n" +
+                                                                                      $"Your Surname is: {StationManager.CurrentUser.Surname}\n" +
+                                                                                      $"Your Email is: {StationManager.CurrentUser.Email}\n" +
+                                                                                      $"Your Date of birth is: {StationManager.CurrentUser.BirthDate}\n" +
+                                                                                      $"Are you an Adult: {StationManager.CurrentUser.IsAdult}\n" +
+                                                                                      $"You are: {StationManager.CurrentUser.CalculateAge()} years old\n" +
+                                                                                      $"Your SunSign is: {StationManager.CurrentUser.SunSign}\n" +
+                                                                                      $"Your Chinese Sign is: {StationManager.CurrentUser.ChineseSign}\n"
+                                                                                     
+                                                                                  );
+
+
+
+
+                    _people.Add(StationManager.CurrentUser);
+
 
 
                 }
+                // Person person = new Person(_name, _surName, _email, _birthDate);
+
+
                 catch (EmailException ex)
                 {
 
@@ -153,6 +180,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
 
+
         private bool CanExecuteCommand()
         {
             return !string.IsNullOrWhiteSpace(_name) && !string.IsNullOrWhiteSpace(_surName) && !string.IsNullOrWhiteSpace(_email) && !(_birthDate == new DateTime(0001, 01, 01, 00, 00, 0));
@@ -162,11 +190,35 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        /*
+            internal UserPageViewModel()
+            {
+            Random rnd = new Random();
+            // _people = new ObservableCollection<Person>(StationManager.DataStorage.PersonList);
+            _people = new ObservableCollection<Person>(PersonListHelper.Persons);
+            _people.Add(new Person("A", "AA", "a@i.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+ }
+             */
+            internal UserPageViewModel()
+            {
+            _people = new ObservableCollection<Person>(PersonListHelper.Persons);
+            }
+
+
+
+
+        
+
+          
+
+
+            public event PropertyChangedEventHandler PropertyChanged;
+
+           // [NotifyPropertyChangedInvocator]
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
-}
