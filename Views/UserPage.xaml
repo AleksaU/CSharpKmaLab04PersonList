@@ -54,7 +54,7 @@
         <Button Grid.Column="1" Grid.Row="4" Margin="10" Content="Add" Command="{Binding ProceedCommand}"/>
         <Button Grid.Column="2" Grid.Row="4" Margin="10" Content="Edit" Command="{Binding ProceedCommand}"/>
         <Button Grid.Column="1" Grid.Row="5" Margin="10" Content="Delete" Command="{Binding ProceedCommand}"/>
-
+        <Button Grid.Column="2" Grid.Row="5" Margin="10" Content="Close" Command="{Binding CloseCommand}"/>
 
     </Grid>
 </Page>

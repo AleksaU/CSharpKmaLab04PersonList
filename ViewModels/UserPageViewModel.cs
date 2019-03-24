@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace CSharpKmaLab04PersonList.ViewModels
 {
@@ -38,6 +39,8 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
         private ObservableCollection<Person> _people;
+
+        private ICommand _closeCommand;
 
 
 
@@ -278,10 +281,19 @@ namespace CSharpKmaLab04PersonList.ViewModels
         }
 
 
+        public ICommand CloseCommand
+        {
+            get
+            {
+                return _closeCommand ?? (_closeCommand = new RelayCommand<object>(CloseImplementation));
+            }
+        }
 
 
-
-
+        private void CloseImplementation(object obj)
+        {
+            StationManager.CloseApp();
+        }
 
 
 
