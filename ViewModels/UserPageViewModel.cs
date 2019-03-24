@@ -211,7 +211,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
            
             _people.Remove(SelectedItem);
-            await Task.Run(() => Thread.Sleep(1000));
+            await Task.Run(() => Thread.Sleep(500));
             MessageBox.Show("Deleted!");
 
         }
@@ -238,7 +238,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
                 formatter.Serialize(fs, _people);
 
             }
-            await Task.Run(() => Thread.Sleep(1000));
+            await Task.Run(() => Thread.Sleep(200));
             MessageBox.Show("Saved!");
 
         }
