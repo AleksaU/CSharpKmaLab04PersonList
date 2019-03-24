@@ -19,12 +19,13 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private string _email;
         private DateTime _birthDate;
 
-        /* private bool _isAdult;
+        /*
+         private bool _isAdult;
          private string _sunSign;
          private string _chineseSign;
          private bool _isBirthday;
-         */
-
+        
+*/
 
         private RelayCommand<object> _proceedCommand;
 
@@ -82,6 +83,12 @@ namespace CSharpKmaLab04PersonList.ViewModels
                 OnPropertyChanged();
             }
         }
+
+
+       
+
+
+
 
 
         public ObservableCollection<Person> People
