@@ -24,7 +24,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <DataGrid ItemsSource="{Binding People, Mode=OneWay}" AutoGenerateColumns="False" >
+        <DataGrid ItemsSource="{Binding People, Mode=OneWay}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Surname" Binding="{Binding Surname}"></DataGridTextColumn>
@@ -53,7 +53,7 @@
 
         <Button Grid.Column="1" Grid.Row="4" Margin="10" Content="Add" Command="{Binding ProceedCommand}"/>
         <Button Grid.Column="2" Grid.Row="4" Margin="10" Content="Edit" Command="{Binding ProceedCommand}"/>
-        <Button Grid.Column="1" Grid.Row="5" Margin="10" Content="Delete" Command="{Binding ProceedCommand}"/>
+        <Button Grid.Column="1" Grid.Row="5" Margin="10" Content="Delete" Command="{Binding DeleteCommand}"/>
         <Button Grid.Column="2" Grid.Row="5" Margin="10" Content="Close" Command="{Binding CloseCommand}"/>
 
     </Grid>

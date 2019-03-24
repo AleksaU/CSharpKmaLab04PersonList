@@ -36,11 +36,27 @@ namespace CSharpKmaLab04PersonList.ViewModels
 */
 
         private RelayCommand<object> _proceedCommand;
+        private RelayCommand<object> _deleteCommand;
 
 
         private ObservableCollection<Person> _people;
 
         private ICommand _closeCommand;
+
+
+
+        private Person _SelectedItem;
+
+        public Person SelectedItem
+        {
+            get { return _SelectedItem; }
+            set
+            {
+                _SelectedItem = value;
+                OnPropertyChanged();
+
+            }
+        }
 
 
 
@@ -196,6 +212,26 @@ namespace CSharpKmaLab04PersonList.ViewModels
         
 
     }
+
+        //
+        public RelayCommand<Object> DeleteCommand
+        {
+            get
+            {
+                return _deleteCommand ?? (_proceedCommand = new RelayCommand<object>(
+                      DeletePerson, o => CanExecuteCommand()));
+            }
+        }
+
+        private void DeletePerson(object o)
+        {
+                _people.Remove(SelectedItem);
+
+            }
+
+
+
+
 
 
         private bool CanExecuteCommand()
