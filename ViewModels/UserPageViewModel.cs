@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -30,6 +31,9 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private RelayCommand<object> _proceedCommand;
         private RelayCommand<object> _deleteCommand;
         private RelayCommand<object> _saveCommand;
+        private RelayCommand<object> _editCommand;
+
+        private bool flag = true;
 
 
         private ObservableCollection<Person> _people;
@@ -129,57 +133,59 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private  void CreatePerson(object o)
         {
            
-            try
-            {
-                StationManager.CurrentUser = new Person(_name, _surName, _email, _birthDate);
+           
+                try
+                {
+                    StationManager.CurrentUser = new Person(_name, _surName, _email, _birthDate);
 
 
 
-                MessageBox.Show(
+                    MessageBox.Show(
 
 
 
-                                                                                  $"Your First name is: {StationManager.CurrentUser.Name}\n" +
-                                                                                  $"Your Surname is: {StationManager.CurrentUser.Surname}\n" +
-                                                                                  $"Your Email is: {StationManager.CurrentUser.Email}\n" +
-                                                                                  $"Your Date of birth is: {StationManager.CurrentUser.BirthDate}\n" +
-                                                                                  $"Are you an Adult: {StationManager.CurrentUser.IsAdult}\n" +
-                                                                                  $"You are: {StationManager.CurrentUser.CalculateAge()} years old\n" +
-                                                                                  $"Your SunSign is: {StationManager.CurrentUser.SunSign}\n" +
-                                                                                  $"Your Chinese Sign is: {StationManager.CurrentUser.ChineseSign}\n"
+                                                                                      $"Your First name is: {StationManager.CurrentUser.Name}\n" +
+                                                                                      $"Your Surname is: {StationManager.CurrentUser.Surname}\n" +
+                                                                                      $"Your Email is: {StationManager.CurrentUser.Email}\n" +
+                                                                                      $"Your Date of birth is: {StationManager.CurrentUser.BirthDate}\n" +
+                                                                                      $"Are you an Adult: {StationManager.CurrentUser.IsAdult}\n" +
+                                                                                      $"You are: {StationManager.CurrentUser.CalculateAge()} years old\n" +
+                                                                                      $"Your SunSign is: {StationManager.CurrentUser.SunSign}\n" +
+                                                                                      $"Your Chinese Sign is: {StationManager.CurrentUser.ChineseSign}\n"
 
-                                                                              );
-
-
-
-
-                _people.Add(StationManager.CurrentUser);
+                                                                                  );
 
 
 
-            }
 
-            catch (EmailException ex)
-            {
-
-                MessageBox.Show("" + ex.Message);
-
-            }
-
-            catch (FutureBirthException e)
-            {
-
-                MessageBox.Show("" + e.Message);
-
-            }
-
-            catch (PastBirthException e)
-            {
+                    _people.Add(StationManager.CurrentUser);
 
 
-                MessageBox.Show("" + e.Message);
 
-            }
+                }
+
+
+                catch (EmailException ex)
+                {
+
+                    MessageBox.Show("" + ex.Message);
+
+                }
+
+                catch (FutureBirthException e)
+                {
+
+                    MessageBox.Show("" + e.Message);
+
+                }
+
+                catch (PastBirthException e)
+                {
+
+
+                    MessageBox.Show("" + e.Message);
+
+                }
 
 
 
@@ -188,6 +194,9 @@ namespace CSharpKmaLab04PersonList.ViewModels
                     MessageBox.Show("Happy b-day to you!");
 
                 }
+
+
+            
 
         }
 
@@ -198,33 +207,38 @@ namespace CSharpKmaLab04PersonList.ViewModels
             {
  
                 return _deleteCommand ?? (_deleteCommand = new RelayCommand<object>(
-                     DeletePerson));
+                     DeletePerson, o => flag));
             }
         }
 
-        private void DeletePerson(object o)
+        public async void DeletePerson(object o)
         {
 
-           
-                _people.Remove(SelectedItem);
+             flag = false;
+            _people.Remove(SelectedItem);
+            await Task.Run(() => Thread.Sleep(100));
+            flag = true;
 
-            
+
 
         }
 
        
         public RelayCommand<Object> SaveCommand
         {
+            
             get
             {
                 return _saveCommand ?? (_saveCommand = new RelayCommand<object>(
-                     SavePerson));
+                     SavePerson, o => flag));
             }
         }
 
-        private void SavePerson(object o)
+        public async void SavePerson(object o)
         {
-           BinaryFormatter formatter = new BinaryFormatter();
+            flag = false;
+
+            BinaryFormatter formatter = new BinaryFormatter();
 
             using (FileStream fs = new FileStream("data.dat", FileMode.OpenOrCreate))
             {
@@ -233,9 +247,36 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
 
-            } 
+            }
+            await Task.Run(() => Thread.Sleep(100));
+            flag = true;
 
         }
+
+
+        public RelayCommand<Object> EditCommand
+        {
+            get
+            {
+
+                return _editCommand ?? (_editCommand = new RelayCommand<object>(o => EditPerson(o), o => flag)
+                   );
+            }
+        }
+
+
+        public async void EditPerson(object o)
+        {
+
+            flag = false;
+            await Task.Run(() => MessageBox.Show("You can edit user by selecting the field you want to change, type,what you want and then press F2"));
+            await Task.Run(() => Thread.Sleep(100));
+           
+            flag = true;
+
+
+        }
+
 
 
         private bool CanExecuteCommand()

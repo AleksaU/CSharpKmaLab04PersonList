@@ -15,15 +15,6 @@
             <ColumnDefinition Width="194"/>
         </Grid.ColumnDefinitions>
 
-        <!-- <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition Height="33*"/>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="75*"/>
-            <RowDefinition Height="75*"/>
-        </Grid.RowDefinitions>-->
-
         <DataGrid ItemsSource="{Binding People, Mode=OneWay}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}"></DataGridTextColumn>
@@ -47,11 +38,12 @@
         <TextBox Grid.Column="2" Margin="14,125,39,299" Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         <DatePicker Grid.Column="2" VerticalAlignment="Center" Margin="14,171,6,255" SelectedDate="{Binding BirthDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="24"/>
 
-        
+
         <Button Grid.Column="1" Margin="13,235,14,181" Content="Add" Command="{Binding ProceedCommand}"/>
         <Button Grid.Column="2" Margin="20,235,39,176" Content="Delete" Command="{Binding DeleteCommand}"/>
-        <Button Grid.Column="2" Margin="20,311,39,106" Content="Close" Command="{Binding CloseCommand}"/>
+        <Button Grid.Column="2" Margin="139,391,-80,26" Content="Close" Command="{Binding CloseCommand}"/>
         <Button Grid.Column="1" Margin="20,311,39,106" Content="Save" Command="{Binding SaveCommand}"/>
+        <Button Grid.Column="2" Margin="40,311,51,106" Content="Edit" Command="{Binding EditCommand}"/>
 
     </Grid>
 </Page>

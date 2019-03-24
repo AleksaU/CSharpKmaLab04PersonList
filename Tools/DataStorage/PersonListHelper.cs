@@ -17,8 +17,6 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
         internal static readonly string AppFolderPath = Path.Combine(AppDataPath, "CSharp_Lab4");
 
-        // internal static readonly string StorageFilePath = Path.Combine(AppFolderPath, "Utkina_lab04PersonList.cskma");
-
 
         internal static readonly string StorageFilePath = "data.dat";
 
@@ -58,8 +56,7 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
                     Random rnd = new Random();
                   for (int i = 0; i < 50; i++)
-                          People.Add(new Person("Jack"+i, "Black"+i, "al@i.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
-                        //Persons.Add(new Person("AAA","BBB", "AAA@ukma.edu.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
+                          People.Add(new Person("Jack"+i, "Black"+i, "al@i.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));   
                 }
 
             }
@@ -67,10 +64,7 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
         internal static void SaveData()
         {
-            // SerializationManager.Serialize(Persons, StorageFilePath);
-
-        
-
+           
             BinaryFormatter formatter = new BinaryFormatter();
 
             using (FileStream fs = new FileStream("data.dat", FileMode.OpenOrCreate))
@@ -80,12 +74,6 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
 
             }
-
-
-
-
-
-
         }
 
         internal static Person AddPerson(string lastName, string firstName, string email, DateTime date)
