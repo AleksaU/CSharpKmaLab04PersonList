@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,11 +17,15 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
         internal static readonly string AppFolderPath = Path.Combine(AppDataPath, "CSharp_Lab4");
 
-        internal static readonly string StorageFilePath = Path.Combine(AppFolderPath, "Utkina_lab04PersonList.cskma");
+        // internal static readonly string StorageFilePath = Path.Combine(AppFolderPath, "Utkina_lab04PersonList.cskma");
+
+
+        internal static readonly string StorageFilePath = "data.dat";
+
 
         private static ObservableCollection<Person> _people;
 
-        public static ObservableCollection<Person> Persons
+        public static ObservableCollection<Person> People
         {
             get => _people;
             private set
@@ -34,9 +39,11 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
             {
                 if (File.Exists(StorageFilePath))
                 {
+                    MessageBox.Show("File exists!");
+
                     try
                     {
-                        Persons = SerializationManager.Deserialize<ObservableCollection<Person>>(StorageFilePath);
+                        People = SerializationManager.Deserialize<ObservableCollection<Person>>(StorageFilePath);
 
                     }
                     catch (Exception ex)
@@ -47,17 +54,12 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
                 }
                 else
                 {
-                    Persons = new ObservableCollection<Person>();
+                    People = new ObservableCollection<Person>();
 
-                    
                     Random rnd = new Random();
-                    string[] lastNames = { "Rubka", "Kraevoy", "Volkov", "Sobolevsky", "Kreyman" };
-                    string[] firstNames = { "Mary", "Ann", "Katy", "Danya", "Hlib", "Vova" };
-                    string fn;
-                    string ln;
-                   // for (int i = 0; i < 50; i++)
-                        //  Persons.Add(new Person(fn = firstNames[rnd.Next(0, 6)], ln = lastNames[rnd.Next(0, 5)], $"{fn}{ln}@ukma.edu.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
-                        Persons.Add(new Person("AAA","BBB", "AAA@ukma.edu.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
+                  for (int i = 0; i < 50; i++)
+                          People.Add(new Person("Jack"+i, "Black"+i, "al@i.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
+                        //Persons.Add(new Person("AAA","BBB", "AAA@ukma.edu.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
                 }
 
             }
@@ -65,13 +67,31 @@ namespace CSharpKmaLab04PersonList.Tools.DataStorage
 
         internal static void SaveData()
         {
-            SerializationManager.Serialize(Persons, StorageFilePath);
+            // SerializationManager.Serialize(Persons, StorageFilePath);
+
+        
+
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream fs = new FileStream("data.dat", FileMode.OpenOrCreate))
+            {
+                // сериализуем весь массив people
+                formatter.Serialize(fs, People);
+
+
+            }
+
+
+
+
+
+
         }
 
         internal static Person AddPerson(string lastName, string firstName, string email, DateTime date)
         {
             Person person = new Person(firstName, lastName, email, date);
-            Persons.Add(person);
+            People.Add(person);
             return person;
         }
     }

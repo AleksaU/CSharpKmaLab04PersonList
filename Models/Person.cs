@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace CSharpKmaLab04PersonList.Models
 {
+   [Serializable]
     class Person
     {
 
         #region Fields
 
-        private Guid _guid;
         private string _name;
         private string _surName;
         private string _email;
@@ -35,7 +35,7 @@ namespace CSharpKmaLab04PersonList.Models
             futureBirthValidation(birthDate);
             pastBirthValidation(birthDate);
 
-            _guid = Guid.NewGuid();
+           
             _name = name;
             _surName = surName;
             _email = email;
@@ -57,17 +57,7 @@ namespace CSharpKmaLab04PersonList.Models
 
 
         #region Properties
-        public Guid Guid
-        {
-            get
-            {
-                return _guid;
-            }
-            private set
-            {
-                _guid = value;
-            }
-        }
+
 
         public string Name
         {
@@ -296,7 +286,7 @@ namespace CSharpKmaLab04PersonList.Models
 
         public bool CheckBirthday()
         {
-            if (_birthDate.DayOfYear == DateTime.Today.Day && _birthDate.Month == DateTime.Today.Month)
+            if (_birthDate.Day == DateTime.Today.Day && _birthDate.Month == DateTime.Today.Month)
             {
 
                 return true;
@@ -307,6 +297,8 @@ namespace CSharpKmaLab04PersonList.Models
             }
         }
 
+        
+            
 
         private void emailValidation(string email)
         {

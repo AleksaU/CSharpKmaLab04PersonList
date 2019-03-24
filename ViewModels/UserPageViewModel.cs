@@ -5,8 +5,10 @@ using CSharpKmaLab04PersonList.Tools.DataStorage;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -37,6 +39,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
         private RelayCommand<object> _proceedCommand;
         private RelayCommand<object> _deleteCommand;
+        private RelayCommand<object> _saveCommand;
 
 
         private ObservableCollection<Person> _people;
@@ -139,10 +142,9 @@ namespace CSharpKmaLab04PersonList.ViewModels
             }
         }
 
-        private void CreatePerson(object o)
+        private  void CreatePerson(object o)
         {
-
-
+           
             try
             {
                 StationManager.CurrentUser = new Person(_name, _surName, _email, _birthDate);
@@ -199,39 +201,67 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
 
-            if (_birthDate.Day == DateTime.Today.Day && _birthDate.Month == DateTime.Today.Month)
-            {
-                MessageBox.Show("Happy b-day to you!");
+                if (_birthDate.Day == DateTime.Today.Day && _birthDate.Month == DateTime.Today.Month)
+                {
+                    MessageBox.Show("Happy b-day to you!");
+
+                }
+            
 
 
-            }
-
-            //, o => CanExecuteCommand()));
+      
         
 
-        
-
-    }
+        }
 
         //
         public RelayCommand<Object> DeleteCommand
         {
             get
             {
-                return _deleteCommand ?? (_proceedCommand = new RelayCommand<object>(
-                      DeletePerson, o => CanExecuteCommand()));
+ 
+                return _deleteCommand ?? (_deleteCommand = new RelayCommand<object>(
+                     DeletePerson));
             }
         }
 
         private void DeletePerson(object o)
         {
+
+           
                 _people.Remove(SelectedItem);
 
+            
+
+        }
+
+       
+        public RelayCommand<Object> SaveCommand
+        {
+            get
+            {
+                return _saveCommand ?? (_saveCommand = new RelayCommand<object>(
+                     SavePerson));
             }
+        }
+
+        private void SavePerson(object o)
+        {
+           BinaryFormatter formatter = new BinaryFormatter();
+
+            using (FileStream fs = new FileStream("data.dat", FileMode.OpenOrCreate))
+            {
+                // сериализуем весь массив people
+                formatter.Serialize(fs, _people);
 
 
 
+            } 
 
+        }
+
+
+            
 
 
         private bool CanExecuteCommand()
@@ -255,7 +285,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
              */
             internal UserPageViewModel()
             {
-            _people = new ObservableCollection<Person>(PersonListHelper.Persons);
+            _people = new ObservableCollection<Person>(PersonListHelper.People);
             _tokenSource = new CancellationTokenSource();
             _token = _tokenSource.Token;
 
@@ -278,10 +308,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
             while (!_token.IsCancellationRequested)
             {
                 var people = _people.ToList();
-                //people.Add(new Person("FirstNAme" + i, "LastNAme" + i, "Email" + i, "Login" + i, "Password" + i));
-                //LoaderManager.Instance.ShowLoader();
-              //  people.Add(new Person(_name, _surName, _email, _birthDate));
-
 
                 People = new ObservableCollection<Person>(people);
                 for (int j = 0; j < 3; j++)
