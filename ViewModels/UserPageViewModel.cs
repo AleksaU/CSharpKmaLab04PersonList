@@ -10,7 +10,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -27,15 +26,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
         private Thread _workingThread;
         private CancellationToken _token;
         private CancellationTokenSource _tokenSource;
-
-
-        /*
-         private bool _isAdult;
-         private string _sunSign;
-         private string _chineseSign;
-         private bool _isBirthday;
-        
-*/
 
         private RelayCommand<object> _proceedCommand;
         private RelayCommand<object> _deleteCommand;
@@ -114,12 +104,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
         }
 
 
-
-
-
-
-
-
         public ObservableCollection<Person> People
         {
             get => _people;
@@ -174,8 +158,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
 
             }
-            // Person person = new Person(_name, _surName, _email, _birthDate);
-
 
             catch (EmailException ex)
             {
@@ -194,7 +176,7 @@ namespace CSharpKmaLab04PersonList.ViewModels
             catch (PastBirthException e)
             {
 
-                //MessageBox.Show("Произошла ошибка: " + ex.Message);
+
                 MessageBox.Show("" + e.Message);
 
             }
@@ -206,15 +188,10 @@ namespace CSharpKmaLab04PersonList.ViewModels
                     MessageBox.Show("Happy b-day to you!");
 
                 }
-            
-
-
-      
-        
 
         }
 
-        //
+
         public RelayCommand<Object> DeleteCommand
         {
             get
@@ -261,9 +238,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
         }
 
 
-            
-
-
         private bool CanExecuteCommand()
         {
             return !string.IsNullOrWhiteSpace(_name) && !string.IsNullOrWhiteSpace(_surName) && !string.IsNullOrWhiteSpace(_email) && !(_birthDate == new DateTime(0001, 01, 01, 00, 00, 0));
@@ -271,18 +245,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
 
         }
 
-
-
-        /*
-            internal UserPageViewModel()
-            {
-            Random rnd = new Random();
-            // _people = new ObservableCollection<Person>(StationManager.DataStorage.PersonList);
-            _people = new ObservableCollection<Person>(PersonListHelper.Persons);
-            _people.Add(new Person("A", "AA", "a@i.ua", new DateTime(rnd.Next(DateTime.Today.Year - 100, DateTime.Today.Year - 1), rnd.Next(1, 13), rnd.Next(1, 30))));
-
- }
-             */
             internal UserPageViewModel()
             {
             _people = new ObservableCollection<Person>(PersonListHelper.People);
@@ -318,7 +280,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
                 }
                 if (_token.IsCancellationRequested)
                     break;
-                //LoaderManager.Instance.HideLoader();
                 for (int j = 0; j < 10; j++)
                 {
                     Thread.Sleep(500);
@@ -356,16 +317,6 @@ namespace CSharpKmaLab04PersonList.ViewModels
         {
             StationManager.CloseApp();
         }
-
-
-
-
-
-
-
-
-
-
 
 
 
